@@ -43,3 +43,21 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+// get message input element
+let msg = document.getElementById('msg');
+
+// define "Form" hook, the name must match the one
+// defined with phx-hoo="Form"
+let Hooks = {}
+Hooks.Form = {
+  // Each time the form is updated run the code in the callback
+  updated() {
+    // If no error displayed reset the message value
+    if(document.getElementsByClassName('invalid-feedback').length == 0) {
+      msg.value = '';
+    }
+  }
+}
+
+let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks}) // Add hooks: Hooks
